@@ -9,10 +9,13 @@ from census import gather
 logging.basicConfig(filename='census_download.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-def download_url(url, output_folder, sleep_time=1):
+def download_url(url, output_folder):
     """
     Download a URL, cache the response, and handle errors.
     """
+
+    sleep_time=1
+
     # Create a filename based on the URL
     parsed_url = urlparse(url)
     filename = os.path.join(output_folder, parsed_url.path.strip('/').replace('/', '_') + '.html')
