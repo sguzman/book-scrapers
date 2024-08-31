@@ -21,21 +21,6 @@ def extract_document_urls(data):
     documents = data.get("documents", [])
     return [doc.get("docUrl", "") for doc in documents]
 
-def transform_url(url):
-    if url.startswith("https://www.census.gov/library/working-papers/"):
-        # Split the URL into parts
-        parts = url.split("/")
-        # Change 'www' to 'www2'
-        parts[2] = "www2.census.gov"
-        # Change the file extension from 'html' to 'pdf'
-        parts[-1] = parts[-1].replace(".html", ".pdf")
-        # Reconstruct the URL
-        return "/".join(parts)
-    return url
-
-def process_urls(urls):
-    return [transform_url(url) for url in urls]
-
 
 def payload():
     logger.info("Starting document URL aggregation process")
@@ -64,9 +49,8 @@ def payload():
     # https://www2.census.gov/library/working-papers/2024/demo/sehsd-wp2024-20.pdf
     out = []
     for url in sorted(all_urls):
-        new_url = transform_url(url)
-        out.append(new_url)
-        print(new_url)
+        out.append(url)
+        print(url)
     
     logger.info("Document URL aggregation process completed")
     return out

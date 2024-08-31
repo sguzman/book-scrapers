@@ -3,6 +3,7 @@ import time
 import requests
 import logging
 from urllib.parse import urlparse
+from census import gather
 
 # Set up logging
 logging.basicConfig(filename='census_download.log', level=logging.INFO,
@@ -53,12 +54,8 @@ def download_census_urls(urls, output_folder):
             print(f"Failed to process: {url}")
 
 if __name__ == "__main__":
-    # Example usage
-    census_urls = [
-        "https://www.census.gov/programs-surveys/popest.html",
-        "https://www.census.gov/data/datasets/time-series/demo/popest/2020s-national-total.html",
-        # Add more URLs as needed
-    ]
+    # Use the generate_census_urls function from gather.py
+    census_urls = gather.payload()
     output_folder = "census_cache"
     
     download_census_urls(census_urls, output_folder)
