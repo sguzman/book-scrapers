@@ -21,8 +21,7 @@ logger = logging.getLogger(__name__)
 def create_directories():
     logger.info("Creating necessary directories")
     CACHE_DIR.mkdir(exist_ok=True)
-    OUTPUT_DIR.mkdir(exist_ok=True)
-    logger.info(f"Directories created: {CACHE_DIR} and {OUTPUT_DIR}")
+    logger.info(f"Directories created: {CACHE_DIR}")
 
 def get_cached_response(start_row):
     cache_file = CACHE_DIR / f"response_{start_row}.json"
@@ -69,38 +68,22 @@ def fetch_data(start_row):
         logger.error(f"Error fetching data for startRow {start_row}: {e}")
         raise
 
-def save_output(data, start_row):
-    output_file = OUTPUT_DIR / f"working_papers_{start_row}.json"
-    with open(output_file, "w") as f:
-        json.dump(data, f, indent=2)
-    logger.info(f"Saved output file: {output_file}")
-
 def main():
     logger.info("Starting Census working papers download process")
     create_directories()
     start_row = 0
-    total_results = None
+    total_results = 4348
 
-    while total_results is None or start_row < total_results:
+    while start_row < total_results:
+        time.sleep(1)
         logger.info(f"Processing batch: startRow {start_row}")
         try:
             data = fetch_data(start_row)
-            save_output(data, start_row)
 
-            if total_results is None:
-                total_results = data.get("totalResults", 0)
-                logger.info(f"Total results: {total_results}")
-
-            results_count = len(data.get("results", []))
+            results_count = len(data.get("documents", []))
             logger.info(f"Processed {results_count} results in this batch")
 
             start_row += results_count
-
-            if start_row < total_results:
-                logger.info("Waiting before next request to avoid overwhelming the server")
-                time.sleep(1)
-            else:
-                logger.info("Reached the end of results")
         except Exception as e:
             logger.error(f"An error occurred while processing startRow {start_row}: {e}")
             break
