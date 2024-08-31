@@ -43,6 +43,7 @@ def fetch_data(start_row):
     if cached_response:
         return cached_response
 
+    time.sleep(1)
     logger.info(f"Fetching data from API for startRow {start_row}")
     payload = {
         "baseTags": ["Census:Type/Working-Paper"],
@@ -75,7 +76,6 @@ def main():
     total_results = 4348
 
     while start_row < total_results:
-        time.sleep(1)
         logger.info(f"Processing batch: startRow {start_row}")
         try:
             data = fetch_data(start_row)
