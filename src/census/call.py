@@ -49,12 +49,19 @@ def download_census_urls(urls, output_folder):
     """
     Download a list of census URLs, caching results and handling errors.
     """
+    total_urls = len(urls)
+    processed_urls = 0
+
     for url in urls:
         result = download_url(url, output_folder)
+        processed_urls += 1
+        
         if result:
-            print(f"Successfully processed: {url}")
+            print(f"{processed_urls}/{total_urls}:{url} ")
+            logging.info(f"Processed {processed_urls}/{total_urls} URLs")
         else:
             print(f"Failed to process: {url}")
+            logging.warning(f"Failed to process URL {processed_urls}/{total_urls}")
 
 if __name__ == "__main__":
     # Use the generate_census_urls function from gather.py
