@@ -7,6 +7,7 @@ import logging
 BASE_URL = "https://xilinxcomprode2rjoqok.org.coveo.com/rest/search/v2?organizationId=xilinxcomprode2rjoqok"
 CACHE_DIR = Path("amd_cache")
 total_results = 1531
+document_key = 'results'
 
 # Set up logging
 logging.basicConfig(level=logging.INFO,
@@ -611,7 +612,7 @@ def main():
         try:
             data = fetch_data(start_row)
 
-            results_count = len(data.get("documents", []))
+            results_count = len(data.get(document_key, []))
             logger.info(f"Processed {results_count} results in this batch")
 
             start_row += results_count
