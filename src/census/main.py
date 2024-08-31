@@ -7,7 +7,6 @@ import logging
 BASE_URL = "https://www.census.gov/bin/faceted/getfacets"
 CACHE_DIR = Path("cache")
 OUTPUT_DIR = Path("output")
-RESULTS_PER_PAGE = 10  # Adjust this if the API returns a different number of results per page
 LOG_FILE = "census_downloader.log"
 
 # Set up logging
@@ -95,11 +94,13 @@ def main():
             results_count = len(data.get("results", []))
             logger.info(f"Processed {results_count} results in this batch")
 
-            start_row += RESULTS_PER_PAGE
+            start_row += results_count
 
             if start_row < total_results:
                 logger.info("Waiting before next request to avoid overwhelming the server")
                 time.sleep(1)
+            else:
+                logger.info("Reached the end of results")
         except Exception as e:
             logger.error(f"An error occurred while processing startRow {start_row}: {e}")
             break
