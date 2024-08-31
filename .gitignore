@@ -12,3 +12,6 @@ cache/
 output/
 *.log
 *.lock
+*.txt
+*.json
+*.html
